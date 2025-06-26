@@ -6,9 +6,10 @@ interface ColumnProps {
   title: string;
   status: TodoStatus;
   todos?: Todo[];
+  onAddTodo?: () => void;
 }
 
-const Card = ({ title, status, todos }: ColumnProps) => {
+const Card = ({ title, status, todos, onAddTodo }: ColumnProps) => {
   const config = getColumnConfig(status);
   const canAddTodo = status === "new";
 
@@ -24,8 +25,9 @@ const Card = ({ title, status, todos }: ColumnProps) => {
             <p className="text-sm opacity-90">{todos?.length} tasks</p>
           </div>
 
-          {canAddTodo && (
+          {canAddTodo && onAddTodo && (
             <button
+              onClick={onAddTodo}
               className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors"
               title="Add new task"
             >
