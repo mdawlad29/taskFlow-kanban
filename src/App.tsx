@@ -1,5 +1,6 @@
 import Header from "./partials/Header";
 import Footer from "./partials/Footer";
+import Column from "./components/Column";
 
 function App() {
   return (
@@ -7,12 +8,7 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <Header />
 
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus
-          deleniti nostrum temporibus voluptatem ad ipsam libero laudantium
-          animi explicabo consequuntur inventore, ut molestias reprehenderit sed
-          architecto labore laboriosam! Odit, nesciunt?
-        </div>
+        <Column />
 
         <Footer />
       </div>
