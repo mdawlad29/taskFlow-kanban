@@ -7,7 +7,7 @@ interface AddTodoModalProps {
   onAdd: (title: string, description: string) => void;
 }
 
-export const AddTodoModal: React.FC<AddTodoModalProps> = ({
+const AddTodoModal: React.FC<AddTodoModalProps> = ({
   isOpen,
   onClose,
   onAdd,
@@ -115,3 +115,5 @@ export const AddTodoModal: React.FC<AddTodoModalProps> = ({
     </div>
   );
 };
+
+export default AddTodoModal;

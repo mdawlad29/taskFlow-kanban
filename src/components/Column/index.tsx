@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { AddTodoModal } from "../../modal/AddTodoModal";
 import { useTodos } from "../../hooks/useTodos";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { TodoStatus } from "../../types/todo";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
 import { ColumnCard } from "../../shared/Card";
+import AddTodoModal from "../../modal/AddTodoModal";
+import TodoViewModal from "../../modal/TodoViewModal";
 
 const Column = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -93,6 +94,8 @@ const Column = () => {
         onClose={() => setShowAddModal(false)}
         onAdd={addTodo}
       />
+
+      <TodoViewModal isOpen={false} onClose={() => {}} />
     </section>
   );
 };
