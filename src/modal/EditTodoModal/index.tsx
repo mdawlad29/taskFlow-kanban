@@ -4,6 +4,7 @@ import { ModalHeader } from "../ModalHeader";
 import { Todo } from "../../types/todo";
 import { getStatusTodoCardConfig } from "../../constants";
 import { ModalLayout } from "../ModalLayout";
+import { Button } from "../../shared/Button";
 
 interface EditTodoModalProps {
   isOpen: boolean;
@@ -80,6 +81,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({
           >
             Description
           </label>
+
           <textarea
             id="description"
             value={description}
@@ -91,19 +93,13 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({
         </div>
 
         <div className="flex gap-3">
-          <button
+          <Button
             type="button"
+            title="Cancel"
             onClick={handleClose}
-            className="flex-1 px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Update Task
-          </button>
+            className="!text-gray-600 !bg-gray-100 hover:!bg-gray-200"
+          />
+          <Button type="submit" title="Add Task" />
         </div>
       </form>
     </ModalLayout>

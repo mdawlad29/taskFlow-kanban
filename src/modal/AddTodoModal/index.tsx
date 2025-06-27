@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { ModalHeader } from "../ModalHeader";
 import { ModalLayout } from "../ModalLayout";
+import { Button } from "../../shared/Button";
 
 interface AddTodoModalProps {
   isOpen: boolean;
@@ -86,19 +87,18 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
         </div>
 
         <div className="flex gap-3">
-          <button
+          <Button
             type="button"
+            title="Cancel"
             onClick={handleClose}
-            className="flex-1 px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
-          <button
+            className="!text-gray-600 !bg-gray-100 hover:!bg-gray-200"
+          />
+
+          <Button
             type="submit"
-            className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Add Task
-          </button>
+            title="Add Task"
+            className="!bg-blue-600 hover:!bg-blue-700 !text-white "
+          />
         </div>
       </form>
     </ModalLayout>

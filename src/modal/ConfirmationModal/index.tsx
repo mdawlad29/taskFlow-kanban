@@ -1,6 +1,8 @@
 import React from "react";
 import { Todo } from "../../types/todo";
 import { ModalLayout } from "../ModalLayout";
+import { Button } from "../../shared/Button";
+import { HelpCircle } from "lucide-react";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -20,31 +22,27 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   return (
     <ModalLayout>
       <div className="p-4 max-w-sm mx-auto bg-white rounded ">
-        <h2 className="text-lg font-semibold mb-4 text-center">
-          Confirm Delete
-        </h2>
+        <HelpCircle size={48} className="text-red-500 mb-4 mx-auto" />
 
-        <p className="mb-6">
-          Are you sure you want to delete the task <strong>{todo.title}</strong>
-          ?
+        <p className="mb-6 text-center">
+          <strong className="block text-2xl mb-2">Are you sure?</strong> You
+          want to delete the task.
         </p>
 
         <div className="flex gap-3">
-          <button
+          <Button
             type="button"
+            title="Cancel"
             onClick={onClose}
-            className="flex-1 px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
+            className="!text-gray-600 !bg-gray-100 hover:!bg-gray-200"
+          />
 
-          <button
+          <Button
             type="button"
+            title="Delete"
             onClick={onConfirm}
-            className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
-          >
-            Delete
-          </button>
+            className="bg-red-600 hover:bg-red-700 "
+          />
         </div>
       </div>
     </ModalLayout>
