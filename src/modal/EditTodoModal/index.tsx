@@ -99,7 +99,7 @@ const EditTodoModal: React.FC<EditTodoModalProps> = ({
             onClick={handleClose}
             className="!text-gray-600 !bg-gray-100 hover:!bg-gray-200"
           />
-          <Button type="submit" title="Add Task" />
+          <Button type="submit" title="Updated Task" />
         </div>
       </form>
     </ModalLayout>

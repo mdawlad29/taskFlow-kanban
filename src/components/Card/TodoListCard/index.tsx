@@ -1,7 +1,7 @@
 import { Calendar, Eye, SquarePen, Trash2 } from "lucide-react";
 import { Todo, TodoStatus } from "../../../types/todo";
 import { getStatusTodoCardConfig } from "../../../constants";
-import { SelectField } from "../../SelectField";
+import { SelectField } from "../../../shared/SelectField";
 
 interface TodoCardProps {
   todo: Todo;
@@ -28,8 +28,8 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
 }) => {
   const statusConfig = getStatusTodoCardConfig(todo.status);
 
-  const isTitleTruncated = todo.title.length > 40;
-  const isDescriptionTruncated = todo.description.length > 100;
+  const isTitleTruncated = todo.title.length > 35;
+  const isDescriptionTruncated = todo.description.length > 90;
   const showEye = isTitleTruncated || isDescriptionTruncated;
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,12 +82,12 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
       {/*<--- Content --->*/}
       <div className="ml-4">
         <h3 className="font-semibold text-gray-900 mb-1 mt-5 group-hover:text-gray-700 transition-colors">
-          {todo?.title?.slice(0, 40) + (todo?.title?.length > 40 ? "..." : "")}
+          {todo?.title?.slice(0, 35) + (todo?.title?.length > 35 ? "..." : "")}
         </h3>
 
         <p className="text-gray-600 text-sm mb-2 leading-relaxed">
-          {todo?.description?.slice(0, 100) +
-            (todo?.description?.length > 100 ? "..." : "")}
+          {todo?.description?.slice(0, 90) +
+            (todo?.description?.length > 90 ? "..." : "")}
         </p>
 
         <div className="flex justify-between items-center">

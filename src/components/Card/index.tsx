@@ -2,8 +2,8 @@ import React from "react";
 import { Plus } from "lucide-react";
 import { Todo, TodoStatus } from "../../types/todo";
 import { getColumnConfig } from "../../constants";
-import { Empty } from "../Empty";
 import { TodoListCard } from "./TodoListCard";
+import { Empty } from "../../shared/Empty";
 
 interface ColumnProps {
   title: string;

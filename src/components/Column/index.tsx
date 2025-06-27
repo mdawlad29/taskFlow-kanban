@@ -3,11 +3,11 @@ import { useTodos } from "../../hooks/useTodos";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { TodoStatus } from "../../types/todo";
 import { useDragAndDrop } from "../../hooks/useDragAndDrop";
-import { ColumnCard } from "../../shared/Card";
 import AddTodoModal from "../../modal/AddTodoModal";
 import TodoViewModal from "../../modal/TodoViewModal";
 import EditTodoModal from "../../modal/EditTodoModal";
 import ConfirmationModal from "../../modal/ConfirmationModal";
+import { ColumnCard } from "../Card";
 
 const Column = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -34,9 +34,9 @@ const Column = () => {
   };
 
   const handleDropTodo = (todoId: string, newStatus: TodoStatus) => {
-    const todo = todos.find((t) => t.id === todoId);
+    const todo = todos?.find((t) => t?.id === todoId);
 
-    if (todo && todo.status !== newStatus) {
+    if (todo && todo?.status !== newStatus) {
       if (newStatus === "ongoing") {
         moveTodo(todoId, newStatus);
       } else {

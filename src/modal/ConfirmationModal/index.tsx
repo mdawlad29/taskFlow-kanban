@@ -25,8 +25,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <HelpCircle size={48} className="text-red-500 mb-4 mx-auto" />
 
         <p className="mb-6 text-center">
-          <strong className="block text-2xl mb-2">Are you sure?</strong> You
-          want to delete the task.
+          <strong className="block text-2xl mb-2 text-green-600">
+            Are you sure?
+          </strong>{" "}
+          You want to delete the task{" "}
+          <span className="font-semibold">{todo?.title}</span>
         </p>
 
         <div className="flex gap-3">
