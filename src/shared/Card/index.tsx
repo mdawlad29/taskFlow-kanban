@@ -7,34 +7,36 @@ import { TodoListCard } from "./TodoListCard";
 
 interface ColumnProps {
   title: string;
-  status: TodoStatus;
   todos?: Todo[];
-  onAddTodo?: () => void;
-  onContextMenu: (e: React.MouseEvent, todoId: string) => void;
-  onDragStart: (todoId: string) => void;
+  status: TodoStatus;
   onDragEnd: () => void;
-  onDragOver: (e: React.DragEvent) => void;
+  onAddTodo?: () => void;
   onDragLeave: () => void;
-  onDrop: (e: React.DragEvent) => void;
   draggedTodo: string | null;
   dragOverColumn: TodoStatus | null;
+  onDrop: (e: React.DragEvent) => void;
+  onDragStart: (todoId: string) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  setShowViewModal: (todoId: string) => void;
   onMoveTodo: (todoId: string, newStatus: TodoStatus) => void;
+  onContextMenu: (e: React.MouseEvent, todoId: string) => void;
 }
 
 export const ColumnCard = ({
   title,
-  status,
   todos,
+  status,
+  onDrop,
   onAddTodo,
-  onDragStart,
   onDragEnd,
   onDragOver,
-  onDragLeave,
-  onDrop,
-  draggedTodo,
-  dragOverColumn,
   onMoveTodo,
+  onDragStart,
+  draggedTodo,
+  onDragLeave,
   onContextMenu,
+  dragOverColumn,
+  setShowViewModal,
 }: ColumnProps) => {
   const config = getColumnConfig(status);
   const isDragOver = dragOverColumn === status;
@@ -55,8 +57,8 @@ export const ColumnCard = ({
           {canAddTodo && onAddTodo && (
             <button
               onClick={onAddTodo}
-              className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors"
               title="Add new task"
+              className="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors"
             >
               <Plus size={20} />
             </button>
@@ -66,14 +68,14 @@ export const ColumnCard = ({
 
       {/*<--- Body --->  */}
       <div
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
         className={`
     flex-1 bg-gray-50 rounded-b-lg border-x-2 border-b-2
     transition-all duration-200 ${config.borderColor} 
     ${isDragOver ? "border-gray-400 bg-gray-100" : ""}
     `}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
       >
         <div className="h-96 overflow-y-auto p-3">
           {todos?.length === 0 ? (
@@ -81,13 +83,14 @@ export const ColumnCard = ({
           ) : (
             todos?.map((todo) => (
               <TodoListCard
-                key={todo.id}
                 todo={todo}
-                onContextMenu={(e) => onContextMenu(e, todo.id)}
-                onDragStart={() => onDragStart(todo.id)}
-                onDragEnd={onDragEnd}
-                isDragging={draggedTodo === todo.id}
+                key={todo.id}
                 onMove={onMoveTodo}
+                onDragEnd={onDragEnd}
+                setShowViewModal={setShowViewModal}
+                isDragging={draggedTodo === todo.id}
+                onDragStart={() => onDragStart(todo.id)}
+                onContextMenu={(e) => onContextMenu(e, todo.id)}
               />
             ))
           )}

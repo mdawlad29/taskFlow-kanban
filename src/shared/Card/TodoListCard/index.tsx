@@ -1,25 +1,32 @@
-import { Calendar } from "lucide-react";
+import { Calendar, Eye } from "lucide-react";
 import { Todo, TodoStatus } from "../../../types/todo";
 import { getStatusTodoCardConfig } from "../../../constants";
+import { SelectField } from "../../SelectField";
 
 interface TodoCardProps {
   todo: Todo;
-  onContextMenu: (e: React.MouseEvent) => void;
-  onDragStart: () => void;
-  onDragEnd: () => void;
   isDragging: boolean;
+  onDragEnd: () => void;
+  onDragStart: () => void;
+  setShowViewModal: (todoId: string) => void;
+  onContextMenu: (e: React.MouseEvent) => void;
   onMove: (todoId: string, newStatus: TodoStatus) => void;
 }
 
 export const TodoListCard: React.FC<TodoCardProps> = ({
   todo,
-  onContextMenu,
-  onDragStart,
+  onMove,
   onDragEnd,
   isDragging,
-  onMove,
+  onDragStart,
+  onContextMenu,
+  setShowViewModal,
 }) => {
   const statusConfig = getStatusTodoCardConfig(todo.status);
+
+  const isTitleTruncated = todo.title.length > 35;
+  const isDescriptionTruncated = todo.description.length > 80;
+  const showEye = isTitleTruncated || isDescriptionTruncated;
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value as TodoStatus;
@@ -33,16 +40,16 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
 
   return (
     <div
+      draggable
+      onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
+      onContextMenu={onContextMenu}
       className={`
         group relative bg-white rounded-lg shadow px-4 py-2 mb-3 last-of-type:mb-0 cursor-move select-none
         transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 overflow-hidden
         ${statusConfig.bgColor}
         ${isDragging ? "opacity-50 shadow-lg scale-105" : ""}
       `}
-      draggable
-      onContextMenu={onContextMenu}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
     >
       {/*<--- Status Label --->*/}
       <div
@@ -58,21 +65,11 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
       </div>
 
       {/*<--- Status Selector --->  */}
-      <select
-        value={todo.status}
+      <SelectField
+        todo={todo}
         onChange={handleStatusChange}
-        className={`border-none rounded-bl-[40px] w-24 text-center ${statusConfig.labelColor} py-0.5 text-sm cursor-pointer absolute top-0 right-0`}
-      >
-        <option disabled={todo.status === "new"} value="new">
-          Pending
-        </option>
-        <option disabled={todo.status === "ongoing"} value="ongoing">
-          Process
-        </option>
-        <option disabled={todo.status === "done"} value="done">
-          Complete
-        </option>
-      </select>
+        className={`rounded-bl-[40px] text-center text-sm cursor-pointer absolute top-0 right-0`}
+      />
 
       {/*<--- Content --->*/}
       <div className="ml-4">
@@ -85,9 +82,19 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
             (todo.description?.length > 80 ? "..." : "")}
         </p>
 
-        <div className="flex items-center gap-1 text-[10px] text-gray-400">
-          <Calendar size={10} />
-          <span>Created {todo.createdAt.toLocaleDateString()}</span>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-1 text-xs text-gray-400">
+            <Calendar size={12} />
+            <span>Created {todo.createdAt.toLocaleDateString()}</span>
+          </div>
+
+          {showEye && (
+            <Eye
+              size={18}
+              onClick={() => setShowViewModal(todo.id)}
+              className="text-gray-600 cursor-pointer"
+            />
+          )}
         </div>
       </div>
     </div>

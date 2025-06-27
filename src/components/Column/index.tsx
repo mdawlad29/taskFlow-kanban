@@ -8,10 +8,11 @@ import AddTodoModal from "../../modal/AddTodoModal";
 import TodoViewModal from "../../modal/TodoViewModal";
 
 const Column = () => {
+  const { showContextMenu } = useContextMenu();
+
   const [showAddModal, setShowAddModal] = useState(false);
   const { todos, addTodo, moveTodo, getTodosByStatus } = useTodos();
-
-  const { showContextMenu } = useContextMenu();
+  const [showViewModal, setShowViewModal] = useState<string | null>(null);
 
   const {
     draggedTodo,
@@ -40,63 +41,75 @@ const Column = () => {
   };
 
   return (
-    <section className="container mx-auto px-4 mb-5">
-      <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
-        <ColumnCard
-          title="new task"
-          status="new"
-          todos={getTodosByStatus("new")}
-          onAddTodo={() => setShowAddModal(true)}
-          onContextMenu={showContextMenu}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragOver={(e) => handleDragOver(e, "new")}
-          onDragLeave={handleDragLeave}
-          onDrop={(e) => handleDrop(e, "new", handleDropTodo)}
-          draggedTodo={draggedTodo}
-          dragOverColumn={dragOverColumn}
-          onMoveTodo={handleMoveTodo}
-        />
+    <>
+      <section className="container mx-auto px-4 mb-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
+          <ColumnCard
+            status="new"
+            title="new task"
+            onDragEnd={handleDragEnd}
+            draggedTodo={draggedTodo}
+            onMoveTodo={handleMoveTodo}
+            onDragStart={handleDragStart}
+            onDragLeave={handleDragLeave}
+            todos={getTodosByStatus("new")}
+            onContextMenu={showContextMenu}
+            dragOverColumn={dragOverColumn}
+            setShowViewModal={setShowViewModal}
+            onAddTodo={() => setShowAddModal(true)}
+            onDragOver={(e) => handleDragOver(e, "new")}
+            onDrop={(e) => handleDrop(e, "new", handleDropTodo)}
+          />
 
-        <ColumnCard
-          title="in progress"
-          status="ongoing"
-          todos={getTodosByStatus("ongoing")}
-          onContextMenu={showContextMenu}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragOver={(e) => handleDragOver(e, "ongoing")}
-          onDragLeave={handleDragLeave}
-          onDrop={(e) => handleDrop(e, "ongoing", handleDropTodo)}
-          draggedTodo={draggedTodo}
-          dragOverColumn={dragOverColumn}
-          onMoveTodo={handleMoveTodo}
-        />
+          <ColumnCard
+            status="ongoing"
+            title="in progress"
+            onDragEnd={handleDragEnd}
+            draggedTodo={draggedTodo}
+            onMoveTodo={handleMoveTodo}
+            onDragStart={handleDragStart}
+            onDragLeave={handleDragLeave}
+            onContextMenu={showContextMenu}
+            dragOverColumn={dragOverColumn}
+            todos={getTodosByStatus("ongoing")}
+            setShowViewModal={setShowViewModal}
+            onDragOver={(e) => handleDragOver(e, "ongoing")}
+            onDrop={(e) => handleDrop(e, "ongoing", handleDropTodo)}
+          />
 
-        <ColumnCard
-          title="completed"
-          status="done"
-          todos={getTodosByStatus("done")}
-          onContextMenu={showContextMenu}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragOver={(e) => handleDragOver(e, "done")}
-          onDragLeave={handleDragLeave}
-          onDrop={(e) => handleDrop(e, "done", handleDropTodo)}
-          draggedTodo={draggedTodo}
-          dragOverColumn={dragOverColumn}
-          onMoveTodo={handleMoveTodo}
-        />
-      </div>
+          <ColumnCard
+            status="done"
+            title="completed"
+            onDragEnd={handleDragEnd}
+            draggedTodo={draggedTodo}
+            onMoveTodo={handleMoveTodo}
+            onDragStart={handleDragStart}
+            onDragLeave={handleDragLeave}
+            onContextMenu={showContextMenu}
+            dragOverColumn={dragOverColumn}
+            todos={getTodosByStatus("done")}
+            setShowViewModal={setShowViewModal}
+            onDragOver={(e) => handleDragOver(e, "done")}
+            onDrop={(e) => handleDrop(e, "done", handleDropTodo)}
+          />
+        </div>
+      </section>
 
+      {/*<--- Add Todo Modal --->*/}
       <AddTodoModal
+        onAdd={addTodo}
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
-        onAdd={addTodo}
       />
 
-      <TodoViewModal isOpen={false} onClose={() => {}} />
-    </section>
+      {/*<--- View Todo Modal --->*/}
+      <TodoViewModal
+        isOpen={!!showViewModal}
+        onStatusChange={moveTodo}
+        onClose={() => setShowViewModal(null)}
+        todo={todos.find((t) => t.id === showViewModal) || null}
+      />
+    </>
   );
 };
 
