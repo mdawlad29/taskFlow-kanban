@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="flex items-center justify-center gap-2">
         <Zap size={16} />
         <span>
-          Add button click to task create • Drag and drop between columns • Use
+          Add icon click to create task • Drag and drop between columns • Use
           action buttons for quick moves
         </span>
       </div>

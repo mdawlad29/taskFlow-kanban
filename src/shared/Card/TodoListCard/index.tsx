@@ -1,4 +1,4 @@
-import { Calendar, Eye } from "lucide-react";
+import { Calendar, Eye, SquarePen, Trash2 } from "lucide-react";
 import { Todo, TodoStatus } from "../../../types/todo";
 import { getStatusTodoCardConfig } from "../../../constants";
 import { SelectField } from "../../SelectField";
@@ -24,8 +24,8 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
 }) => {
   const statusConfig = getStatusTodoCardConfig(todo.status);
 
-  const isTitleTruncated = todo.title.length > 35;
-  const isDescriptionTruncated = todo.description.length > 80;
+  const isTitleTruncated = todo.title.length > 40;
+  const isDescriptionTruncated = todo.description.length > 100;
   const showEye = isTitleTruncated || isDescriptionTruncated;
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -60,7 +60,7 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
     `}
       >
         <p className="rotate-90 tracking-widest text-[10px] font-semibold">
-          {statusConfig.label}
+          {statusConfig?.label}
         </p>
       </div>
 
@@ -74,27 +74,40 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
       {/*<--- Content --->*/}
       <div className="ml-4">
         <h3 className="font-semibold text-gray-900 mb-1 mt-5 group-hover:text-gray-700 transition-colors">
-          {todo.title?.slice(0, 35) + (todo.title?.length > 35 ? "..." : "")}
+          {todo?.title?.slice(0, 40) + (todo?.title?.length > 40 ? "..." : "")}
         </h3>
 
         <p className="text-gray-600 text-sm mb-2 leading-relaxed">
-          {todo.description?.slice(0, 80) +
-            (todo.description?.length > 80 ? "..." : "")}
+          {todo?.description?.slice(0, 100) +
+            (todo?.description?.length > 100 ? "..." : "")}
         </p>
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-1 text-xs text-gray-400">
             <Calendar size={12} />
-            <span>Created {todo.createdAt.toLocaleDateString()}</span>
+            <span>Created {todo?.createdAt?.toLocaleDateString()}</span>
           </div>
 
-          {showEye && (
-            <Eye
-              size={18}
-              onClick={() => setShowViewModal(todo.id)}
-              className="text-gray-600 cursor-pointer"
+          <div className="flex items-center gap-2">
+            {showEye && (
+              <Eye
+                size={18}
+                onClick={() => setShowViewModal(todo?.id)}
+                className="text-gray-600 cursor-pointer"
+              />
+            )}
+
+            <SquarePen
+              size={16}
+              onClick={() => setShowViewModal(todo?.id)}
+              className="text-green-700 hover:text-green-600 cursor-pointer"
             />
-          )}
+
+            <Trash2
+              size={16}
+              className="text-red-700 hover:text-red-600 cursor-pointer"
+            />
+          </div>
         </div>
       </div>
     </div>

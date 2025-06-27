@@ -51,11 +51,11 @@ const TodoViewModal: React.FC<TodoViewModalProps> = ({
             </div>
           </div>
 
-          <p className="text-gray-700 mb-3">{todo.title}</p>
+          <p className="text-gray-700 mb-3">{todo?.title}</p>
 
           <div>
             <h3 className="text-gray-900 font-semibold">Description</h3>
-            <p className="text-gray-700 text-justify">{todo.description}</p>
+            <p className="text-gray-700 text-justify">{todo?.description}</p>
           </div>
         </div>
       </div>
