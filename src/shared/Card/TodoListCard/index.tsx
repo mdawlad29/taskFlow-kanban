@@ -9,7 +9,9 @@ interface TodoCardProps {
   onDragEnd: () => void;
   onDragStart: () => void;
   setShowViewModal: (todoId: string) => void;
+  setShowEditModal: (todoId: string) => void;
   onContextMenu: (e: React.MouseEvent) => void;
+  setShowDeleteModal: (todoId: string) => void;
   onMove: (todoId: string, newStatus: TodoStatus) => void;
 }
 
@@ -21,6 +23,8 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
   onDragStart,
   onContextMenu,
   setShowViewModal,
+  setShowEditModal,
+  setShowDeleteModal,
 }) => {
   const statusConfig = getStatusTodoCardConfig(todo.status);
 
@@ -36,6 +40,10 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
     } else {
       onMove(todo.id, newStatus);
     }
+  };
+
+  const handleConfirmation = () => {
+    setShowDeleteModal(todo?.id);
   };
 
   return (
@@ -97,14 +105,17 @@ export const TodoListCard: React.FC<TodoCardProps> = ({
               />
             )}
 
-            <SquarePen
-              size={16}
-              onClick={() => setShowViewModal(todo?.id)}
-              className="text-green-700 hover:text-green-600 cursor-pointer"
-            />
+            {todo.status !== "done" && (
+              <SquarePen
+                size={14}
+                onClick={() => setShowEditModal(todo?.id)}
+                className="text-green-700 hover:text-green-600 cursor-pointer"
+              />
+            )}
 
             <Trash2
-              size={16}
+              size={14}
+              onClick={() => handleConfirmation()}
               className="text-red-700 hover:text-red-600 cursor-pointer"
             />
           </div>

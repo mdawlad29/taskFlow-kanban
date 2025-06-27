@@ -1,29 +1,37 @@
-import React, { useState } from "react";
-import { Plus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { SquarePen } from "lucide-react";
 import { ModalHeader } from "../ModalHeader";
+import { Todo } from "../../types/todo";
+import { getStatusTodoCardConfig } from "../../constants";
 import { ModalLayout } from "../ModalLayout";
 
-interface AddTodoModalProps {
+interface EditTodoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (title: string, description: string) => void;
+  todo: Todo | null;
+  onUpdate: (id: string, title: string, description: string) => void;
 }
 
-const AddTodoModal: React.FC<AddTodoModalProps> = ({
-  onAdd,
+const EditTodoModal: React.FC<EditTodoModalProps> = ({
   isOpen,
   onClose,
+  todo,
+  onUpdate,
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  useEffect(() => {
+    if (todo) {
+      setTitle(todo.title);
+      setDescription(todo.description);
+    }
+  }, [todo]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (title.trim() && description.trim()) {
-      onAdd(title.trim(), description.trim());
-      setTitle("");
-      setDescription("");
+    if (todo && title.trim() && description.trim()) {
+      onUpdate(todo.id, title.trim(), description.trim());
       onClose();
     }
   };
@@ -34,25 +42,25 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !todo) return null;
+  const statusConfig = getStatusTodoCardConfig(todo.status);
 
   return (
     <ModalLayout>
       <ModalHeader
-        title={"add new task"}
+        title="Edit Task"
         onClose={handleClose}
-        icon={<Plus size={20} className="text-blue-600" />}
-        iconBgColor="!bg-blue-100"
+        iconBgColor={statusConfig.bgColor}
+        icon={<SquarePen size={20} className="text-gray-600" />}
       />
 
-      {/*<--- Form --->*/}
       <form onSubmit={handleSubmit} className="p-3">
         <div className="mb-4">
           <label
             htmlFor="title"
             className="block text-sm font-semibold text-gray-900 mb-2"
           >
-            Task Title *
+            Task Title
           </label>
 
           <input
@@ -60,9 +68,8 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="text-sm w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="Enter task title..."
-            required
+            className="text-sm w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-transparent transition-all"
+            placeholder="Edit task title..."
           />
         </div>
 
@@ -71,17 +78,15 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
             htmlFor="description"
             className="block text-sm font-semibold text-gray-900 mb-2"
           >
-            Description *
+            Description
           </label>
-
           <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
-            className="text-sm w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all resize-none focus:outline-none"
-            placeholder="Describe your task in detail..."
-            required
+            className="text-sm w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent transition-all resize-none focus:outline-none"
+            placeholder="Edit task description..."
           />
         </div>
 
@@ -95,9 +100,9 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
           </button>
           <button
             type="submit"
-            className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+            className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
           >
-            Add Task
+            Update Task
           </button>
         </div>
       </form>
@@ -105,4 +110,4 @@ const AddTodoModal: React.FC<AddTodoModalProps> = ({
   );
 };
 
-export default AddTodoModal;
+export default EditTodoModal;

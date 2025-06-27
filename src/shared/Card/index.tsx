@@ -18,6 +18,8 @@ interface ColumnProps {
   onDragStart: (todoId: string) => void;
   onDragOver: (e: React.DragEvent) => void;
   setShowViewModal: (todoId: string) => void;
+  setShowEditModal: (todoId: string) => void;
+  setShowDeleteModal: (todoId: string) => void;
   onMoveTodo: (todoId: string, newStatus: TodoStatus) => void;
   onContextMenu: (e: React.MouseEvent, todoId: string) => void;
 }
@@ -37,6 +39,8 @@ export const ColumnCard = ({
   onContextMenu,
   dragOverColumn,
   setShowViewModal,
+  setShowEditModal,
+  setShowDeleteModal,
 }: ColumnProps) => {
   const config = getColumnConfig(status);
   const isDragOver = dragOverColumn === status;
@@ -88,7 +92,9 @@ export const ColumnCard = ({
                 onMove={onMoveTodo}
                 onDragEnd={onDragEnd}
                 setShowViewModal={setShowViewModal}
+                setShowEditModal={setShowEditModal}
                 isDragging={draggedTodo === todo.id}
+                setShowDeleteModal={setShowDeleteModal}
                 onDragStart={() => onDragStart(todo.id)}
                 onContextMenu={(e) => onContextMenu(e, todo.id)}
               />

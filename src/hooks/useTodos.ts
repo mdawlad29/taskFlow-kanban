@@ -52,6 +52,23 @@ export const useTodos = () => {
     );
   }, []);
 
+  // inside useTodos
+  const deleteTodo = useCallback((id: string) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  }, []);
+
+  // Updates the title and description of a todo
+  const updateTodo = useCallback(
+    (id: string, title: string, description: string) => {
+      setTodos((prev) =>
+        prev.map((todo) =>
+          todo.id === id ? { ...todo, title, description } : todo
+        )
+      );
+    },
+    []
+  );
+
   /**
    * Returns a list of todos for a given status,
    * sorted by most recently moved
@@ -65,5 +82,5 @@ export const useTodos = () => {
   );
 
   // expose all methods and state
-  return { todos, addTodo, moveTodo, getTodosByStatus };
+  return { todos, addTodo, moveTodo, updateTodo, deleteTodo, getTodosByStatus };
 };

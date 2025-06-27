@@ -6,14 +6,19 @@ import { useDragAndDrop } from "../../hooks/useDragAndDrop";
 import { ColumnCard } from "../../shared/Card";
 import AddTodoModal from "../../modal/AddTodoModal";
 import TodoViewModal from "../../modal/TodoViewModal";
+import EditTodoModal from "../../modal/EditTodoModal";
+import ConfirmationModal from "../../modal/ConfirmationModal";
 
 const Column = () => {
-  const { showContextMenu } = useContextMenu();
-
   const [showAddModal, setShowAddModal] = useState(false);
-  const { todos, addTodo, moveTodo, getTodosByStatus } = useTodos();
+  const [showEditModal, setShowEditModal] = useState<string | null>(null);
   const [showViewModal, setShowViewModal] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState<string | null>(null);
 
+  const { todos, addTodo, moveTodo, deleteTodo, updateTodo, getTodosByStatus } =
+    useTodos();
+
+  const { showContextMenu } = useContextMenu();
   const {
     draggedTodo,
     dragOverColumn,
@@ -40,6 +45,13 @@ const Column = () => {
     }
   };
 
+  const handleConfirmDelete = () => {
+    if (showDeleteModal) {
+      deleteTodo(showDeleteModal);
+      setShowDeleteModal(null);
+    }
+  };
+
   return (
     <>
       <section className="container mx-auto px-4 mb-5">
@@ -56,7 +68,9 @@ const Column = () => {
             onContextMenu={showContextMenu}
             dragOverColumn={dragOverColumn}
             setShowViewModal={setShowViewModal}
+            setShowEditModal={setShowEditModal}
             onAddTodo={() => setShowAddModal(true)}
+            setShowDeleteModal={setShowDeleteModal}
             onDragOver={(e) => handleDragOver(e, "new")}
             onDrop={(e) => handleDrop(e, "new", handleDropTodo)}
           />
@@ -73,6 +87,8 @@ const Column = () => {
             dragOverColumn={dragOverColumn}
             todos={getTodosByStatus("ongoing")}
             setShowViewModal={setShowViewModal}
+            setShowEditModal={setShowEditModal}
+            setShowDeleteModal={setShowDeleteModal}
             onDragOver={(e) => handleDragOver(e, "ongoing")}
             onDrop={(e) => handleDrop(e, "ongoing", handleDropTodo)}
           />
@@ -89,6 +105,8 @@ const Column = () => {
             dragOverColumn={dragOverColumn}
             todos={getTodosByStatus("done")}
             setShowViewModal={setShowViewModal}
+            setShowEditModal={setShowEditModal}
+            setShowDeleteModal={setShowDeleteModal}
             onDragOver={(e) => handleDragOver(e, "done")}
             onDrop={(e) => handleDrop(e, "done", handleDropTodo)}
           />
@@ -102,12 +120,28 @@ const Column = () => {
         onClose={() => setShowAddModal(false)}
       />
 
+      {/*<--- Edit Todo Modal --->*/}
+      <EditTodoModal
+        onUpdate={updateTodo}
+        isOpen={showEditModal !== null}
+        onClose={() => setShowEditModal(null)}
+        todo={todos.find((t) => t.id === showEditModal) || null}
+      />
+
       {/*<--- View Todo Modal --->*/}
       <TodoViewModal
         isOpen={!!showViewModal}
         onStatusChange={moveTodo}
         onClose={() => setShowViewModal(null)}
         todo={todos.find((t) => t.id === showViewModal) || null}
+      />
+
+      {/*<--- Confirmation Modal --->*/}
+      <ConfirmationModal
+        todo={todos.find((t) => t.id === showDeleteModal) || null}
+        isOpen={!!showDeleteModal}
+        onClose={() => setShowDeleteModal(null)}
+        onConfirm={handleConfirmDelete}
       />
     </>
   );
