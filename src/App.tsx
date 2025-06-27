@@ -1,18 +1,28 @@
-import Header from "./partials/Header";
-import Footer from "./partials/Footer";
+import { useState, useEffect } from "react";
 import Column from "./components/Column";
+import { Layouts } from "./partials/Layouts";
+import { Loader } from "./shared/Loader";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="container mx-auto px-4 py-8">
-        <Header />
-
-        <Column />
-
-        <Footer />
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Layouts>
+          <Column />
+        </Layouts>
+      )}
+    </>
   );
 }
 

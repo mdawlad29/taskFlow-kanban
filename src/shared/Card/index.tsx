@@ -1,20 +1,47 @@
+import React from "react";
 import { Plus } from "lucide-react";
 import { Todo, TodoStatus } from "../../types/todo";
 import { getColumnConfig } from "../../constants";
+import { Empty } from "../Empty";
+import { TodoListCard } from "./TodoListCard";
 
 interface ColumnProps {
   title: string;
   status: TodoStatus;
   todos?: Todo[];
   onAddTodo?: () => void;
+  onContextMenu: (e: React.MouseEvent, todoId: string) => void;
+  onDragStart: (todoId: string) => void;
+  onDragEnd: () => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDragLeave: () => void;
+  onDrop: (e: React.DragEvent) => void;
+  draggedTodo: string | null;
+  dragOverColumn: TodoStatus | null;
+  onMoveTodo: (todoId: string, newStatus: TodoStatus) => void;
 }
 
-const Card = ({ title, status, todos, onAddTodo }: ColumnProps) => {
+export const ColumnCard = ({
+  title,
+  status,
+  todos,
+  onAddTodo,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDragLeave,
+  onDrop,
+  draggedTodo,
+  dragOverColumn,
+  onMoveTodo,
+  onContextMenu,
+}: ColumnProps) => {
   const config = getColumnConfig(status);
+  const isDragOver = dragOverColumn === status;
   const canAddTodo = status === "new";
 
   return (
-    <div className="flex flex-col h-full">
+    <div>
       {/*<--- Header --->*/}
       <div
         className={`${config.headerBg} text-white p-4 rounded-t-lg shadow-sm`}
@@ -40,27 +67,32 @@ const Card = ({ title, status, todos, onAddTodo }: ColumnProps) => {
       {/*<--- Body --->  */}
       <div
         className={`
-          flex-1 bg-gray-50 p-4 rounded-b-lg border-2 min-h-96
-          transition-all duration-200 overflow-y-auto 
-          ${config.borderColor}
-        `}
+    flex-1 bg-gray-50 rounded-b-lg border-x-2 border-b-2
+    transition-all duration-200 ${config.borderColor} 
+    ${isDragOver ? "border-gray-400 bg-gray-100" : ""}
+    `}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
       >
-        <div className="flex flex-col items-center justify-center h-32 text-center">
-          <div className={`text-4xl mb-2 ${config.emptyStateColor}`}>
-            {status === "new" ? "📝" : status === "ongoing" ? "⚡" : "✅"}
-          </div>
-
-          <p className={`${config.emptyStateColor} font-medium`}>
-            {status === "new"
-              ? "Add your first task"
-              : status === "ongoing"
-              ? "No tasks in progress"
-              : "No completed tasks yet"}
-          </p>
+        <div className="h-96 overflow-y-auto p-3">
+          {todos?.length === 0 ? (
+            <Empty status={status} />
+          ) : (
+            todos?.map((todo) => (
+              <TodoListCard
+                key={todo.id}
+                todo={todo}
+                onContextMenu={(e) => onContextMenu(e, todo.id)}
+                onDragStart={() => onDragStart(todo.id)}
+                onDragEnd={onDragEnd}
+                isDragging={draggedTodo === todo.id}
+                onMove={onMoveTodo}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
   );
 };
-
-export default Card;

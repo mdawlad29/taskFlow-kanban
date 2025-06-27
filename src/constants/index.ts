@@ -22,3 +22,32 @@ export const getColumnConfig = (status: TodoStatus) => {
       };
   }
 };
+
+export const getStatusTodoCardConfig = (status: string) => {
+  switch (status) {
+    case "new":
+      return {
+        bgColor: "bg-blue-50 border-blue-200",
+        labelColor: "bg-blue-100 text-blue-800",
+        label: "New",
+      };
+    case "ongoing":
+      return {
+        bgColor: "bg-orange-50 border-orange-200",
+        labelColor: "bg-orange-100 text-orange-800",
+        label: "Ongoing",
+      };
+    case "done":
+      return {
+        bgColor: "bg-green-50 border-green-200",
+        labelColor: "bg-green-100 text-green-800",
+        label: "Done",
+      };
+    default:
+      return {
+        bgColor: "bg-gray-50 border-gray-200",
+        labelColor: "bg-gray-100 text-gray-800",
+        label: "Unknown",
+      };
+  }
+};

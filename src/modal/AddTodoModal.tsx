@@ -17,6 +17,7 @@ export const AddTodoModal: React.FC<AddTodoModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (title.trim() && description.trim()) {
       onAdd(title.trim(), description.trim());
       setTitle("");

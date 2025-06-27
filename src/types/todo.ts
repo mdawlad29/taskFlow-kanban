@@ -5,7 +5,6 @@ export interface Todo {
   status: "new" | "ongoing" | "done";
   createdAt: Date;
   movedAt: Date;
-  dueDate?: Date;
 }
 
 export type TodoStatus = "new" | "ongoing" | "done";
